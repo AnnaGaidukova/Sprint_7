@@ -1,11 +1,4 @@
-import com.google.gson.Gson;
-import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.isA;
-import static org.junit.Assert.*;
-
-import io.restassured.RestAssured;
-import io.restassured.response.Response;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -46,10 +39,7 @@ public class OrdersTest {
                 {"ТестТест", "Тестов", "Космонавтов 12", 6, "89111111111", 1, "2023-05-10", "комментарий для курьера", List.of("BLACK", "GRAY")}  //тест с двумя цветами
         };
     }
-   /* @Before
-    public void setUp() {
-        RestAssured.baseURI = "http://qa-scooter.praktikum-services.ru/";
-    } */
+
     @Test
     public void checkOrdersResponseBody() {
         Orders orders = new Orders(firstName, lastName, address, metroStation, phone, rentTime, deliveryDate, comment);
@@ -57,18 +47,5 @@ public class OrdersTest {
                 .then().assertThat().body("track", isA(Integer.class))
                 .and()
                 .statusCode(201);
-
-       /* Orders orders = new Orders(firstName, lastName, address, metroStation, phone, rentTime, deliveryDate, comment);
-        Response response = given()
-                .header("Content-type", "application/json")
-                .and()
-                .body(orders)
-                .and()
-                .when()
-                .post("/api/v1/orders");
-        response.then().assertThat().body("track", isA(Integer.class))
-                .and()
-                .statusCode(201);
-        System.out.println(response.body().asString()); */
     }
 }

@@ -1,7 +1,6 @@
 import static org.hamcrest.CoreMatchers.notNullValue;
 import org.junit.Test;
 
-
 public class OrdersTrackTest {
     OrderApi orderApi = new OrderApi();
     @Test
