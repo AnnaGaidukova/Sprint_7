@@ -15,6 +15,7 @@ import java.util.List;
 @RunWith(Parameterized.class)
 
 public class OrdersTest {
+    OrderApi orderApi = new OrderApi();
     private final String firstName;
     private final String lastName;
     private final String address;
@@ -45,13 +46,19 @@ public class OrdersTest {
                 {"ТестТест", "Тестов", "Космонавтов 12", 6, "89111111111", 1, "2023-05-10", "комментарий для курьера", List.of("BLACK", "GRAY")}  //тест с двумя цветами
         };
     }
-    @Before
+   /* @Before
     public void setUp() {
         RestAssured.baseURI = "http://qa-scooter.praktikum-services.ru/";
-    }
+    } */
     @Test
     public void checkOrdersResponseBody() {
         Orders orders = new Orders(firstName, lastName, address, metroStation, phone, rentTime, deliveryDate, comment);
+        orderApi.createOrder(orders)
+                .then().assertThat().body("track", isA(Integer.class))
+                .and()
+                .statusCode(201);
+
+       /* Orders orders = new Orders(firstName, lastName, address, metroStation, phone, rentTime, deliveryDate, comment);
         Response response = given()
                 .header("Content-type", "application/json")
                 .and()
@@ -62,6 +69,6 @@ public class OrdersTest {
         response.then().assertThat().body("track", isA(Integer.class))
                 .and()
                 .statusCode(201);
-        System.out.println(response.body().asString());
+        System.out.println(response.body().asString()); */
     }
 }

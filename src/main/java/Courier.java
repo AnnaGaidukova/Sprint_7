@@ -9,7 +9,7 @@ public class Courier {
         this.firstName = firstName;
     }
 
-    public Courier() {
+    public Courier(String s, String s1) {
     }
     public String getLogin() {
         return login;

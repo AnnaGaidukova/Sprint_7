@@ -9,14 +9,26 @@ import static io.restassured.RestAssured.given;
 import org.hamcrest.Matchers;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.isA;
+
 import static org.junit.Assert.*;
 
 public class CourierTest {
     String randomLogin = RandomStringUtils.random(10, true, false);
     String randomName = RandomStringUtils.random(10, true, false);
-    @Before
+    Courier courier = new Courier(randomLogin, "Test123!", randomName);
+    CourierApi courierApi = new CourierApi();
+    private int courierId;
+    private int courierIdSecond;
+   /* @Before
     public void setUp(){
-        RestAssured.baseURI = "http://qa-scooter.praktikum-services.ru/";
+       RestAssured.baseURI = Config.Urls.BASE_URI;
+    } */
+
+
+    @After
+    public void deleteCourier() {
+        courierApi.delete(courierId);
+        courierApi.delete(courierIdSecond);
     }
 
     @Test
@@ -24,6 +36,11 @@ public class CourierTest {
     public void checkCourierResponseBody() {
         //проверка успешного создания курьера
         Courier courier = new Courier(randomLogin, "Test123!", randomName);
+        courierApi.createCourier(courier)
+                .then().assertThat().body("ok", Matchers.is(true))
+                .and()
+                .statusCode(201);
+/*        Courier courier = new Courier(randomLogin, "Test123!", randomName);
 
         Response response1 = given()
                 .header("Content-type", "application/json")
@@ -61,12 +78,19 @@ public class CourierTest {
 
         responseDelete.then().assertThat().body("ok", equalTo(true))
                 .and()
-                .statusCode(200);
+                .statusCode(200); */
     }
     @Test
     public void checkCourierDoubleResponseBodyTest() {
         //тест создания курьера с существующим логином
         Courier courier = new Courier(randomLogin, "Test123!", randomName);
+        courierApi.createCourier(courier);
+        courierApi.createCourier(courier)
+                .then().assertThat()
+                .body("message", equalTo("Этот логин уже используется. Попробуйте другой."))
+                .and()
+                .statusCode(409);
+     /*   Courier courier = new Courier(randomLogin, "Test123!", randomName);
 
         Response response1 = given()
                 .header("Content-type", "application/json")
@@ -90,13 +114,19 @@ public class CourierTest {
         response2.then().assertThat().body("message", equalTo("Этот логин уже используется. Попробуйте другой."))
                 .and()
                 .statusCode(409);
-
-        System.out.println(response2.body().asString());
+        System.out.println(response.body().asString()); */
     }
     @Test
     public void checkCourierResponseWithoutFirstName() {
-        // тест создания курьера без логина
-                Courier courier = new Courier(randomLogin, "Test123!", "");
+        // тест создания курьера без имени
+        courier = new Courier(randomLogin, "Test123!", "");
+        courierApi.createCourier(courier)
+                .then().assertThat()
+                .body("message", equalTo("Недостаточно данных для создания учетной записи"))
+                .and()
+                .statusCode(400);
+
+            /*    Courier courier = new Courier(randomLogin, "Test123!", "");
 
         Response response = given()
                 .header("Content-type", "application/json")
@@ -109,15 +139,20 @@ public class CourierTest {
                 .and()
                 .statusCode(400);
 
-        System.out.println(response.body().asString());
+        System.out.println(response.body().asString()); */
     }
 
     @Test
     public void checkCourierResponseWithoutPassword() {
         //тест создания курьера без пароля
-        Courier courier = new Courier(randomLogin, "", randomName);
+        courier = new Courier(randomLogin, "", randomName);
+        courierApi.createCourier(courier)
+                .then().assertThat()
+                .body("message", equalTo("Недостаточно данных для создания учетной записи"))
+                .and()
+                .statusCode(400);
 
-        Response response = given()
+       /* Response response = given()
                 .header("Content-type", "application/json")
                 .and()
                 .body(courier)
@@ -127,14 +162,19 @@ public class CourierTest {
                 .and()
                 .statusCode(400);
 
-        System.out.println(response.body().asString());
+        System.out.println(response.body().asString()); */
     }
     @Test
     public void checkCourierResponseWithoutLogin() {
-        //тест создания курьера без имени
-        Courier courier = new Courier("", "Test123!", randomName);
+        //тест создания курьера без логина
+        courier = new Courier("", "Test123!", randomName);
+        courierApi.createCourier(courier)
+                .then().assertThat()
+                .body("message", equalTo("Недостаточно данных для создания учетной записи"))
+                .and()
+                .statusCode(400);
 
-        Response response = given()
+       /* Response response = given()
                 .header("Content-type", "application/json")
                 .and()
                 .body(courier)
@@ -145,6 +185,6 @@ public class CourierTest {
                 .and()
                 .statusCode(400);
 
-        System.out.println(response.body().asString());
+        System.out.println(response.body().asString()); */
     }
 }
