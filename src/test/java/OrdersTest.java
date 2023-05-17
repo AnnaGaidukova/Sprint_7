@@ -1,4 +1,7 @@
 import static org.hamcrest.Matchers.isA;
+
+import io.qameta.allure.Description;
+import io.qameta.allure.junit4.DisplayName;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -41,6 +44,8 @@ public class OrdersTest {
     }
 
     @Test
+    @DisplayName("Positive test create order")
+    @Description("Checking response body and status code 201")
     public void checkOrdersResponseBody() {
         Orders orders = new Orders(firstName, lastName, address, metroStation, phone, rentTime, deliveryDate, comment);
         orderApi.createOrder(orders)

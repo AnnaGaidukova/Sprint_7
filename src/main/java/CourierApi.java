@@ -1,3 +1,4 @@
+import io.qameta.allure.Description;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import io.restassured.response.ValidatableResponse;
@@ -10,6 +11,7 @@ public class CourierApi {
     }
     private static final String COURIER_URI = "api/v1/courier/";
 
+    @Description("for testing creating courier")
     public Response createCourier(Courier courier) {
         return given().header("Content-type", "application/json")
                 .and()
@@ -18,6 +20,7 @@ public class CourierApi {
                 .post(COURIER_URI);
     }
 
+    @Description("for testing authorizing courier")
     public Response loginCourier(CourierLogin courierLogin) {
         return given().header("Content-type", "application/json")
                 .and()
@@ -26,6 +29,7 @@ public class CourierApi {
                 .post(COURIER_URI + "login/");
     }
 
+    @Description("for testing deleting courier")
     public ValidatableResponse delete(int id) {
         return given()
                 .header("Content-type", "application/json")

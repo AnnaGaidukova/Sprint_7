@@ -1,3 +1,5 @@
+import io.qameta.allure.Description;
+import io.qameta.allure.junit4.DisplayName;
 import org.junit.Test;
 import org.junit.After;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -19,7 +21,8 @@ public class CourierTest {
     }
 
     @Test
-
+    @DisplayName("Positive test for create courier")
+    @Description("Checking response body and status code 201")
     public void checkCourierResponseBody() {
         //проверка успешного создания курьера
         Courier courier = new Courier(randomLogin, "Test123!", randomName);
@@ -29,6 +32,8 @@ public class CourierTest {
                 .statusCode(201);
     }
     @Test
+    @DisplayName("Negative test for create courier with existing login")
+    @Description("Checking response body and status code 409")
     public void checkCourierDoubleResponseBodyTest() {
         //тест создания курьера с существующим логином
         Courier courier = new Courier(randomLogin, "Test123!", randomName);
@@ -40,6 +45,8 @@ public class CourierTest {
                 .statusCode(409);
     }
     @Test
+    @DisplayName("Negative test for create courier without name")
+    @Description("Checking response body and status code 400")
     public void checkCourierResponseWithoutFirstName() {
         // тест создания курьера без имени
         courier = new Courier(randomLogin, "Test123!", "");
@@ -51,6 +58,8 @@ public class CourierTest {
     }
 
     @Test
+    @DisplayName("Negative test for create courier without password")
+    @Description("Checking response body and status code 400")
     public void checkCourierResponseWithoutPassword() {
         //тест создания курьера без пароля
         courier = new Courier(randomLogin, "", randomName);
@@ -61,6 +70,8 @@ public class CourierTest {
                 .statusCode(400);
     }
     @Test
+    @DisplayName("Negative test for create courier without login")
+    @Description("Checking response body and status code 400")
     public void checkCourierResponseWithoutLogin() {
         //тест создания курьера без логина
         courier = new Courier("", "Test123!", randomName);
